@@ -9,17 +9,21 @@ terraform {
 
 provider "docker" {}
 
+# You can find schema and type of each param here
+# https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs/resources/image
 resource "docker_image" "modelserving" {
   name         = "modelserving:latest"
   keep_locally = true
+  build {
+    context = "."
+  }
 }
-
 
 # You can find the schema and type of each param here
 # https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs/resources/container
 resource "docker_container" "modelserving" {
   image = docker_image.modelserving.image_id
-  name  = "modelserving_container"
+  name  = "model_serving_container"
 
   # Type: (Block List)
   ports {
@@ -28,7 +32,7 @@ resource "docker_container" "modelserving" {
   }
 
   # Type: (String)
-  working_dir = "/home/modelserving" 
+  working_dir = "/home/model_serving" 
 
   # Type: (List of String). If this does not break up spaces by a new string, IT WILL FAIL!
   command = ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "1234"] 
@@ -36,12 +40,12 @@ resource "docker_container" "modelserving" {
   # For all intents and purposes, Block Set would be defined similarly to Block List
   # Type: (Block Set)
   volumes {
-    container_path = "/home/modelserving"
-    host_path = "/home/darren/Documents/terraform-task/modelserving"
+    container_path = "/home/model_serving"
+    host_path = "/home/darren/Documents/terraform-task/model_serving"
   }
 
   volumes {
-    container_path = "/home/modelserving/someotherdir"
+    container_path = "/home/model_serving/someotherdir"
     host_path = "/home/darren/Documents"
   }  
 
