@@ -24,4 +24,4 @@ def read_root():
 def predict(request: IrisRequest):
     features = np.array(request.features).reshape(1, -1)
     prediction = model.predict(features)
-    return {"prediction": int(prediction[0])}
+    return {"prediction": int(prediction[0]), "message": "You can add anything else to this dict"}
