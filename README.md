@@ -9,6 +9,8 @@ docker compose up --build -d
 docker logs -f modelserving
 ```
 
+If you go to `localhost:1234` you should see "Sklearn Model Serving with FastAPI"
+
 2. Get predictions via REST API call
 
 In your local terminal, you can then run the following
